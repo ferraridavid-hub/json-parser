@@ -18,14 +18,22 @@ public class Parser {
         }
     }
 
+    private void parseStringToString() throws UnexpectedTokenException {
+        eat(TokenType.STRING);
+        eat(TokenType.COLON);
+        eat(TokenType.STRING);
+    }
+
     public void parse() throws UnexpectedTokenException {
         eat(TokenType.LEFT_BRACE);
         if (currentToken.getType().equals(TokenType.RIGHT_BRACE)) {
             eat(TokenType.RIGHT_BRACE);
         } else {
-            eat(TokenType.STRING);
-            eat(TokenType.COLON);
-            eat(TokenType.STRING);
+            parseStringToString();
+            while (currentToken.getType().equals(TokenType.COMMA)) {
+                eat(TokenType.COMMA);
+                parseStringToString();
+            }
             eat(TokenType.RIGHT_BRACE);
         }
         eat(TokenType.EOF);

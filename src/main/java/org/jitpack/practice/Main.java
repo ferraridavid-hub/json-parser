@@ -10,7 +10,7 @@ public class Main {
             var parser = new Parser(new Lexer(input));
             parser.parse();
             System.out.println("Json Object " + input + " is valid.");
-        } catch (InvalidSyntaxException | UnexpectedTokenException e) {
+        } catch (UnexpectedTokenException e) {
             System.err.println("Json Object " + input + " is invalid.");
             System.err.println(e.getMessage());
         }

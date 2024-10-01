@@ -36,4 +36,22 @@ public class ParserTest {
         assertDoesNotThrow(parser::parse);
     }
 
+    @Test
+    public void testMultpleStringToStringJson() {
+        var parser = assertDoesNotThrow(() -> new Parser(new Lexer("{\"name\": \"david\", \"lastName\":\"ferrari\"}")));
+        assertDoesNotThrow(parser::parse);
+    }
+
+    @Test
+    public void testInvalidMultipleStringToStringJson() {
+        var parser = assertDoesNotThrow(() -> new Parser(new Lexer("{\"name\": \"david\", \"lastName\":\"ferrari\", \"job\":\"Software Engineer\",}")));
+        assertThrows(UnexpectedTokenException.class, parser::parse);
+    }
+
+    @Test
+    public void testInvalidMultipleCommas() {
+        var parser = assertDoesNotThrow(() -> new Parser(new Lexer("{\"name\": \"david\",, \"lastName\":\"ferrari\"}")));
+        assertThrows(UnexpectedTokenException.class, parser::parse);
+    }
+
 }

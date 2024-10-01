@@ -41,6 +41,9 @@ public class Lexer {
             case ':':
                 position++;
                 return new Token(TokenType.COLON, ":");
+            case ',':
+                position++;
+                return new Token(TokenType.COMMA, ",");
             case '"':
                 var message = message();
                 position += message().length();

@@ -5,5 +5,6 @@ public enum TokenType {
     RIGHT_BRACE,
     STRING,
     COLON,
+    COMMA,
     EOF
 }

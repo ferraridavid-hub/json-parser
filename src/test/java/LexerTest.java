@@ -79,6 +79,22 @@ public class LexerTest {
     }
 
     @Test
+    public void testComma() {
+        var lexer = new Lexer(",,,");
+        var token1 = assertDoesNotThrow(lexer::nextToken);
+        var token2 = assertDoesNotThrow(lexer::nextToken);
+        var token3 = assertDoesNotThrow(lexer::nextToken);
+
+        var expectedToken1 = new Token(TokenType.COMMA, ",");
+        var expectedToken2 = new Token(TokenType.COMMA, ",");
+        var expectedToken3 = new Token(TokenType.COMMA, ",");
+
+        assertEquals(expectedToken1, token1);
+        assertEquals(expectedToken2, token2);
+        assertEquals(expectedToken3, token3);
+    }
+
+    @Test
     public void testInvalidString() {
         var lexer = new Lexer("\"beta");
         assertThrows(UnexpectedTokenException.class, lexer::nextToken);
