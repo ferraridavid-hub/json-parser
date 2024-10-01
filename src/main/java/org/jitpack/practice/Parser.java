@@ -10,17 +10,24 @@ public class Parser {
         this.currentToken = lexer.nextToken();
     }
 
-    private void eat(TokenType type) throws UnexpectedTokenException, InvalidSyntaxException {
+    private void eat(TokenType type) throws UnexpectedTokenException {
         if (currentToken.getType().equals(type)) {
             currentToken = lexer.nextToken();
         } else {
-            throw new InvalidSyntaxException("Invalid syntax: " + currentToken.getValue());
+            throw new UnexpectedTokenException(currentToken.getValue());
         }
     }
 
-    public void parse() throws UnexpectedTokenException, InvalidSyntaxException {
+    public void parse() throws UnexpectedTokenException {
         eat(TokenType.LEFT_BRACE);
-        eat(TokenType.RIGHT_BRACE);
+        if (currentToken.getType().equals(TokenType.RIGHT_BRACE)) {
+            eat(TokenType.RIGHT_BRACE);
+        } else {
+            eat(TokenType.STRING);
+            eat(TokenType.COLON);
+            eat(TokenType.STRING);
+            eat(TokenType.RIGHT_BRACE);
+        }
         eat(TokenType.EOF);
     }
 }

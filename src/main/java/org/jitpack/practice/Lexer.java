@@ -46,7 +46,7 @@ public class Lexer {
                 position += message().length();
                 return new Token(TokenType.STRING, message);
             default:
-                throw new UnexpectedTokenException("Unexpected token: " + current);
+                throw new UnexpectedTokenException("" + current);
         }
     }
 }
