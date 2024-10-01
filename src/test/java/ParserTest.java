@@ -114,6 +114,14 @@ public class ParserTest {
         checkValidJson(json);
     }
 
+    @Test
+    public void testArrayOfValues() {
+        var json = """
+                [1, 2, 3, null, {"names": []}, [], [{}], []]
+                """;
+        checkValidJson(json);
+    }
+
     private static void checkValidJson(String json) {
         var parser = assertDoesNotThrow(() -> new Parser(new Lexer(json)));
         assertDoesNotThrow(parser::parse);

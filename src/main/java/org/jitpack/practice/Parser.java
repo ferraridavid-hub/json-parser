@@ -44,7 +44,7 @@ public class Parser {
 
     private void parseValues() throws UnexpectedTokenException {
         parseValue();
-        while(currentToken.getType().equals(TokenType.COMMA)) {
+        while (currentToken.getType().equals(TokenType.COMMA)) {
             eat(TokenType.COMMA);
             parseValue();
         }
@@ -65,11 +65,18 @@ public class Parser {
     }
 
     public void parse() throws UnexpectedTokenException {
-        eat(TokenType.LEFT_BRACE);
-        if (!currentToken.getType().equals(TokenType.RIGHT_BRACE)) {
-            parseKeyValuePairs();
+        if (currentToken.getType().equals(TokenType.LEFT_SQUARE_BRACE)) {
+            eat(TokenType.LEFT_SQUARE_BRACE);
+            if (!currentToken.getType().equals(TokenType.RIGHT_SQUARE_BRACE))
+                parseValues();
+            eat(TokenType.RIGHT_SQUARE_BRACE);
+        } else {
+            eat(TokenType.LEFT_BRACE);
+            if (!currentToken.getType().equals(TokenType.RIGHT_BRACE)) {
+                parseKeyValuePairs();
+            }
+            eat(TokenType.RIGHT_BRACE);
         }
-        eat(TokenType.RIGHT_BRACE);
         eat(TokenType.EOF);
     }
 }
