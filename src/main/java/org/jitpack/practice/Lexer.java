@@ -10,7 +10,7 @@ public class Lexer {
         this.position = 0;
     }
 
-    private String message() throws UnexpectedTokenException {
+    private String tokenizeString() throws UnexpectedTokenException {
         int j = position + 1;
         while (j < text.length() && text.charAt(j) != '"') {
             j++;
@@ -33,10 +33,22 @@ public class Lexer {
     private String tokenizeNull() throws UnexpectedTokenException {
         var nullString = "null";
         String sub = text.substring(position, position + nullString.length());
-        if(sub.equals(nullString)) {
+        if (sub.equals(nullString)) {
             return sub;
         }
         throw new UnexpectedTokenException("" + text.charAt(position));
+    }
+
+    private String tokenizeNumber() throws UnexpectedTokenException {
+        int j = position;
+        if (text.charAt(j) == '0' && text.charAt(j + 1) != '.') {
+            throw new UnexpectedTokenException("0");
+        }
+        while (j < text.length()
+                && (Character.isDigit(text.charAt(j)) || (text.charAt(j) == '.' && Character.isDigit(text.charAt(j + 1))))) {
+            j++;
+        }
+        return text.substring(position, j);
     }
 
     public Token nextToken() throws UnexpectedTokenException {
@@ -69,8 +81,8 @@ public class Lexer {
                 position++;
                 return new Token(TokenType.COMMA, ",");
             case '"':
-                var message = message();
-                position += message().length();
+                var message = tokenizeString();
+                position += message.length();
                 return new Token(TokenType.STRING, message);
             case 'f':
                 var boolFalse = tokenizeBoolean(false);
@@ -84,6 +96,19 @@ public class Lexer {
                 var nullString = tokenizeNull();
                 position += nullString.length();
                 return new Token(TokenType.NULL, nullString);
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                var numberString = tokenizeNumber();
+                position += numberString.length();
+                return new Token(TokenType.NUMBER, numberString);
             default:
                 throw new UnexpectedTokenException("" + current);
         }

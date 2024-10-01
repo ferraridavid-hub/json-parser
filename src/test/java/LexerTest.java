@@ -4,6 +4,8 @@ import org.jitpack.practice.TokenType;
 import org.jitpack.practice.UnexpectedTokenException;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LexerTest {
@@ -166,5 +168,41 @@ public class LexerTest {
         assertEquals(expectedToken2, token2);
         assertEquals(expectedToken3, token3);
         assertEquals(expectedToken4, token4);
+    }
+
+    @Test
+    public void testNumbersToken() {
+        var lexer = new Lexer("{21.21}");
+        var token1 = assertDoesNotThrow(lexer::nextToken);
+        var token2 = assertDoesNotThrow(lexer::nextToken);
+        var token3 = assertDoesNotThrow(lexer::nextToken);
+
+        var expectedToken1 = new Token(TokenType.LEFT_BRACE, "{");
+        var expectedToken2 = new Token(TokenType.NUMBER, "21.21");
+        var expectedToken3 = new Token(TokenType.RIGHT_BRACE, "}");
+
+        assertEquals(expectedToken1, token1);
+        assertEquals(expectedToken2, token2);
+        assertEquals(expectedToken3, token3);
+    }
+
+    @Test
+    public void testInvalidNumberToken() {
+        var lexer = new Lexer("{21.}");
+        assertDoesNotThrow(lexer::nextToken);
+        assertDoesNotThrow(lexer::nextToken);
+        assertThrows(UnexpectedTokenException.class, lexer::nextToken);
+
+        lexer = new Lexer("{.34}");
+        assertDoesNotThrow(lexer::nextToken);
+        assertThrows(UnexpectedTokenException.class, lexer::nextToken);
+    }
+
+    @Test
+    public void testFloatNumberStartingWithZero() {
+        var lexer = new Lexer("0.324}");
+        var token = assertDoesNotThrow(lexer::nextToken);
+        var expectedToken = new Token(TokenType.NUMBER, "0.324");
+        assertEquals(expectedToken, token);
     }
 }
