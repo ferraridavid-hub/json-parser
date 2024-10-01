@@ -21,7 +21,10 @@ public class Parser {
     private void parseKeyValuePair() throws UnexpectedTokenException {
         eat(TokenType.STRING);
         eat(TokenType.COLON);
-        eat(TokenType.STRING);
+        if (currentToken.getType().equals(TokenType.STRING))
+            eat(TokenType.STRING);
+        else if (currentToken.getType().equals(TokenType.BOOLEAN))
+            eat(TokenType.BOOLEAN);
     }
 
     private void parseKeyValuePairs() throws UnexpectedTokenException {

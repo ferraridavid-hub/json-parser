@@ -8,49 +8,77 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ParserTest {
     @Test
     public void testEmptyJsonObject() {
-        var parser = assertDoesNotThrow(() -> new Parser(new Lexer("{}")));
-        assertDoesNotThrow(parser::parse);
+        checkValidJson("{}");
     }
 
     @Test
     public void testJsonWithWithspaces() {
-        var parser = assertDoesNotThrow(() -> new Parser(new Lexer("  { \n }  \t")));
-        assertDoesNotThrow(parser::parse);
+        checkValidJson("  { \n }  \t");
     }
 
     @Test
     public void testInvalidTokenJson() {
-        var parser = assertDoesNotThrow(() ->new Parser(new Lexer("{alfa}")));
-        assertThrows(UnexpectedTokenException.class, parser::parse);
+        checkInvalidJson("{alfa}");
     }
 
     @Test
     public void testInvalidSyntaxJson() {
-        var parser = assertDoesNotThrow( () -> new Parser(new Lexer("{}{")));
-        assertThrows(UnexpectedTokenException.class, parser::parse);
+        checkInvalidJson("{}{");
     }
 
     @Test
     public void testStringToStringJson() {
-        var parser = assertDoesNotThrow(() -> new Parser(new Lexer("{\"name\":\"david\"}")));
-        assertDoesNotThrow(parser::parse);
+        checkValidJson("{\"name\":\"david\"}");
     }
 
     @Test
     public void testMultpleStringToStringJson() {
-        var parser = assertDoesNotThrow(() -> new Parser(new Lexer("{\"name\": \"david\", \"lastName\":\"ferrari\"}")));
-        assertDoesNotThrow(parser::parse);
+        checkValidJson("{\"name\": \"david\", \"lastName\":\"ferrari\"}");
     }
 
     @Test
     public void testInvalidMultipleStringToStringJson() {
-        var parser = assertDoesNotThrow(() -> new Parser(new Lexer("{\"name\": \"david\", \"lastName\":\"ferrari\", \"job\":\"Software Engineer\",}")));
-        assertThrows(UnexpectedTokenException.class, parser::parse);
+        checkInvalidJson("{\"name\": \"david\", \"lastName\":\"ferrari\", \"job\":\"Software Engineer\",}");
     }
 
     @Test
     public void testInvalidMultipleCommas() {
-        var parser = assertDoesNotThrow(() -> new Parser(new Lexer("{\"name\": \"david\",, \"lastName\":\"ferrari\"}")));
+        checkInvalidJson("{\"name\": \"david\",, \"lastName\":\"ferrari\"}");
+    }
+
+    @Test
+    public void testJsonWithBoolean() {
+        var json = """
+                {
+                    "name": "david",
+                    "lastName": "ferrari",
+                    "isAdmin": false,
+                    "isPremium": true
+                }
+                """;
+        checkValidJson(json);
+    }
+
+    @Test
+    public void testInvalidJsonWithBooleanKey() {
+        var json = """
+                {
+                    "name": "david",
+                    "lastName": "ferrari",
+                    "isAdmin": false,
+                    true: "isPremium"
+                }
+                """;
+        checkInvalidJson(json);
+    }
+
+    private static void checkValidJson(String json) {
+        var parser = assertDoesNotThrow(() -> new Parser(new Lexer(json)));
+        assertDoesNotThrow(parser::parse);
+    }
+
+    private static void checkInvalidJson(String json) {
+        var parser = assertDoesNotThrow(() -> new Parser(new Lexer(json)));
         assertThrows(UnexpectedTokenException.class, parser::parse);
     }
 
