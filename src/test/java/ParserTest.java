@@ -105,7 +105,10 @@ public class ParserTest {
                                         "java": "2 years",
                                         "docker": "1 year",
                                         "burpsuite": "1 year"
-                                    }
+                                    },
+                    "partnership": 2,
+                    "numbers": [1, 2, 3, 45, 6, 3.2, 1.2],
+                    "probability": 0.43
                 }
                 """;
         checkValidJson(json);

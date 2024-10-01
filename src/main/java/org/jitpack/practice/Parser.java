@@ -25,6 +25,8 @@ public class Parser {
             eat(TokenType.BOOLEAN);
         else if (currentToken.getType().equals(TokenType.NULL))
             eat(TokenType.NULL);
+        else if (currentToken.getType().equals(TokenType.NUMBER))
+            eat(TokenType.NUMBER);
         else if (currentToken.getType().equals(TokenType.LEFT_SQUARE_BRACE)) {
             eat(TokenType.LEFT_SQUARE_BRACE);
             if (!currentToken.getType().equals(TokenType.RIGHT_SQUARE_BRACE)) {
