@@ -8,5 +8,7 @@ public enum TokenType {
     COMMA,
     BOOLEAN,
     NULL,
+    LEFT_SQUARE_BRACE,
+    RIGHT_SQUARE_BRACE,
     EOF
 }

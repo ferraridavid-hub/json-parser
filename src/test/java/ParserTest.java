@@ -82,6 +82,16 @@ public class ParserTest {
         checkInvalidJson(json);
     }
 
+    @Test
+    public void testJsonWithList() {
+        checkValidJson("{\"names\" : [true, false, \"name\", [[null, true]]]}");
+    }
+
+    @Test
+    public void testInvalidJsonWithList() {
+        checkInvalidJson("{[]:true}");
+    }
+
     private static void checkValidJson(String json) {
         var parser = assertDoesNotThrow(() -> new Parser(new Lexer(json)));
         assertDoesNotThrow(parser::parse);

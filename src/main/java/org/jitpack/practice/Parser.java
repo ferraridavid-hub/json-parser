@@ -18,15 +18,34 @@ public class Parser {
         }
     }
 
-    private void parseKeyValuePair() throws UnexpectedTokenException {
-        eat(TokenType.STRING);
-        eat(TokenType.COLON);
+    private void parseValue() throws UnexpectedTokenException {
         if (currentToken.getType().equals(TokenType.STRING))
             eat(TokenType.STRING);
         else if (currentToken.getType().equals(TokenType.BOOLEAN))
             eat(TokenType.BOOLEAN);
         else if (currentToken.getType().equals(TokenType.NULL))
             eat(TokenType.NULL);
+        else if (currentToken.getType().equals(TokenType.LEFT_SQUARE_BRACE)) {
+            eat(TokenType.LEFT_SQUARE_BRACE);
+            if (!currentToken.getType().equals(TokenType.RIGHT_SQUARE_BRACE)) {
+                parseValues();
+            }
+            eat(TokenType.RIGHT_SQUARE_BRACE);
+        }
+    }
+
+    private void parseValues() throws UnexpectedTokenException {
+        parseValue();
+        while(currentToken.getType().equals(TokenType.COMMA)) {
+            eat(TokenType.COMMA);
+            parseValue();
+        }
+    }
+
+    private void parseKeyValuePair() throws UnexpectedTokenException {
+        eat(TokenType.STRING);
+        eat(TokenType.COLON);
+        parseValue();
     }
 
     private void parseKeyValuePairs() throws UnexpectedTokenException {
@@ -35,16 +54,14 @@ public class Parser {
             eat(TokenType.COMMA);
             parseKeyValuePair();
         }
-        eat(TokenType.RIGHT_BRACE);
     }
 
     public void parse() throws UnexpectedTokenException {
         eat(TokenType.LEFT_BRACE);
-        if (currentToken.getType().equals(TokenType.RIGHT_BRACE)) {
-            eat(TokenType.RIGHT_BRACE);
-        } else {
+        if (!currentToken.getType().equals(TokenType.RIGHT_BRACE)) {
             parseKeyValuePairs();
         }
+        eat(TokenType.RIGHT_BRACE);
         eat(TokenType.EOF);
     }
 }

@@ -56,6 +56,12 @@ public class Lexer {
             case '}':
                 position++;
                 return new Token(TokenType.RIGHT_BRACE, "}");
+            case '[':
+                position++;
+                return new Token(TokenType.LEFT_SQUARE_BRACE, "[");
+            case ']':
+                position++;
+                return new Token(TokenType.RIGHT_SQUARE_BRACE, "]");
             case ':':
                 position++;
                 return new Token(TokenType.COLON, ":");

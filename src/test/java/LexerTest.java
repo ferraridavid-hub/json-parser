@@ -148,4 +148,23 @@ public class LexerTest {
         assertEquals(expectedToken3, token3);
         assertEquals(expectedToken4, token4);
     }
+
+    @Test
+    public void testListToken() {
+        var lexer = new Lexer("{[]}");
+        var token1 = assertDoesNotThrow(lexer::nextToken);
+        var token2 = assertDoesNotThrow(lexer::nextToken);
+        var token3 = assertDoesNotThrow(lexer::nextToken);
+        var token4 = assertDoesNotThrow(lexer::nextToken);
+
+        var expectedToken1 = new Token(TokenType.LEFT_BRACE, "{");
+        var expectedToken2 = new Token(TokenType.LEFT_SQUARE_BRACE, "[");
+        var expectedToken3 = new Token(TokenType.RIGHT_SQUARE_BRACE, "]");
+        var expectedToken4 = new Token(TokenType.RIGHT_BRACE, "}");
+
+        assertEquals(expectedToken1, token1);
+        assertEquals(expectedToken2, token2);
+        assertEquals(expectedToken3, token3);
+        assertEquals(expectedToken4, token4);
+    }
 }
