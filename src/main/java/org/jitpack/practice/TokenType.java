@@ -6,5 +6,6 @@ public enum TokenType {
     STRING,
     COLON,
     COMMA,
+    BOOLEAN,
     EOF
 }

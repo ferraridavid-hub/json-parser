@@ -21,6 +21,15 @@ public class Lexer {
         return text.substring(position, j + 1);
     }
 
+    private String tokenizeBoolean(boolean b) throws UnexpectedTokenException {
+        String boolString = Boolean.toString(b);
+        String sub = text.substring(position, position + boolString.length());
+        if (sub.equals(boolString)) {
+            return sub;
+        }
+        throw new UnexpectedTokenException("" + text.charAt(position));
+    }
+
     public Token nextToken() throws UnexpectedTokenException {
         while (position < text.length() && Character.isWhitespace(text.charAt(position))) {
             position++;
@@ -48,6 +57,14 @@ public class Lexer {
                 var message = message();
                 position += message().length();
                 return new Token(TokenType.STRING, message);
+            case 'f':
+                var boolFalse = tokenizeBoolean(false);
+                position += boolFalse.length();
+                return new Token(TokenType.BOOLEAN, boolFalse);
+            case 't':
+                var boolTrue = tokenizeBoolean(true);
+                position += boolTrue.length();
+                return new Token(TokenType.BOOLEAN, boolTrue);
             default:
                 throw new UnexpectedTokenException("" + current);
         }

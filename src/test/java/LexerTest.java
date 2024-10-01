@@ -105,4 +105,28 @@ public class LexerTest {
         var lexer = new Lexer("gamm\"");
         assertThrows(UnexpectedTokenException.class, lexer::nextToken);
     }
+
+    @Test
+    public void testFalseBooleanToken() {
+        var lexer = new Lexer("false");
+        var token = assertDoesNotThrow(lexer::nextToken);
+        var expectedToken = new Token(TokenType.BOOLEAN, "false");
+        assertEquals(expectedToken, token);
+    }
+
+    @Test
+    public void testTrueBooleanToken() {
+        var lexer = new Lexer("{true}");
+        var token1 = assertDoesNotThrow(lexer::nextToken);
+        var token2 = assertDoesNotThrow(lexer::nextToken);
+        var token3 = assertDoesNotThrow(lexer::nextToken);
+
+        var expectedToken1 = new Token(TokenType.LEFT_BRACE, "{");
+        var expectedToken2 = new Token(TokenType.BOOLEAN, "true");
+        var expectedToken3 = new Token(TokenType.RIGHT_BRACE, "}");
+
+        assertEquals(expectedToken1, token1);
+        assertEquals(expectedToken2, token2);
+        assertEquals(expectedToken3, token3);
+    }
 }
