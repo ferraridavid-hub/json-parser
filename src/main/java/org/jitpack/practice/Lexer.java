@@ -10,7 +10,18 @@ public class Lexer {
         this.position = 0;
     }
 
-    public Token nextToken() throws UnexpectedTokenException{
+    private String message() throws UnexpectedTokenException {
+        int j = position + 1;
+        while (j < text.length() && text.charAt(j) != '"') {
+            j++;
+        }
+        if (j >= text.length()) {
+            throw new UnexpectedTokenException("Matching \" not found.");
+        }
+        return text.substring(position, j + 1);
+    }
+
+    public Token nextToken() throws UnexpectedTokenException {
         while (position < text.length() && Character.isWhitespace(text.charAt(position))) {
             position++;
         }
@@ -20,11 +31,19 @@ public class Lexer {
         }
 
         var current = text.charAt(position);
-        position++;
-        return switch (current) {
-            case '{' -> new Token(TokenType.LEFT_BRACE, "{");
-            case '}' -> new Token(TokenType.RIGHT_BRACE, "}");
-            default -> throw new UnexpectedTokenException("Unexpected token: " + current);
-        };
+        switch (current) {
+            case '{':
+                position++;
+                return new Token(TokenType.LEFT_BRACE, "{");
+            case '}':
+                position++;
+                return new Token(TokenType.RIGHT_BRACE, "}");
+            case '"':
+                var message = message();
+                position += message().length();
+                return new Token(TokenType.STRING, message);
+            default:
+                throw new UnexpectedTokenException("Unexpected token: " + current);
+        }
     }
 }

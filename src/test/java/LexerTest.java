@@ -42,9 +42,29 @@ public class LexerTest {
     }
 
     @Test
-    public void testInvalidToken() {
+    public void testInvalidJson() {
         var lexer = new Lexer(" {alfa}");
         assertDoesNotThrow(lexer::nextToken);
+        assertThrows(UnexpectedTokenException.class, lexer::nextToken);
+    }
+
+    @Test
+    public void testString() {
+        var lexer = new Lexer("\"alfa\"");
+        var token = assertDoesNotThrow(lexer::nextToken);
+        var expectedToken = new Token(TokenType.STRING, "\"alfa\"");
+        assertEquals(expectedToken, token);
+    }
+
+    @Test
+    public void testInvalidString() {
+        var lexer = new Lexer("\"beta");
+        assertThrows(UnexpectedTokenException.class, lexer::nextToken);
+    }
+
+    @Test
+    public void testInvalidToken() {
+        var lexer = new Lexer("gamm\"");
         assertThrows(UnexpectedTokenException.class, lexer::nextToken);
     }
 }
