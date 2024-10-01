@@ -4,16 +4,16 @@ import org.jitpack.practice.TokenType;
 import org.jitpack.practice.UnexpectedTokenException;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LexerTest {
 
     @Test
-    public void testEmptyJsonObject() throws UnexpectedTokenException {
+    public void testEmptyJsonObject() {
         var lexer = new Lexer("{}");
-        var token1 = lexer.nextToken();
-        var token2 = lexer.nextToken();
-        var token3 = lexer.nextToken();
+        var token1 = assertDoesNotThrow(lexer::nextToken);
+        var token2 = assertDoesNotThrow(lexer::nextToken);
+        var token3 = assertDoesNotThrow(lexer::nextToken);
 
         var expectedToken1 = new Token(TokenType.LEFT_BRACE, "{");
         var expectedToken2 = new Token(TokenType.RIGHT_BRACE, "}");
@@ -25,11 +25,12 @@ public class LexerTest {
     }
 
     @Test
-    public void testJsonWithSpaces() throws Exception {
+    public void testJsonWithSpaces(){
         var lexer = new Lexer("     {   }   ");
-        var token1 = lexer.nextToken();
-        var token2 = lexer.nextToken();
-        var token3 = lexer.nextToken();
+        var token1 = assertDoesNotThrow(lexer::nextToken);
+        var token2 = assertDoesNotThrow(lexer::nextToken);
+        var token3 = assertDoesNotThrow(lexer::nextToken);
+
 
         var expectedToken1 = new Token(TokenType.LEFT_BRACE, "{");
         var expectedToken2 = new Token(TokenType.RIGHT_BRACE, "}");
@@ -40,10 +41,10 @@ public class LexerTest {
         assertEquals(expectedToken3, token3);
     }
 
-    @Test(expected = UnexpectedTokenException.class)
-    public void testInvalidToken() throws UnexpectedTokenException{
+    @Test
+    public void testInvalidToken() {
         var lexer = new Lexer(" {alfa}");
-        lexer.nextToken();
-        lexer.nextToken();
+        assertDoesNotThrow(lexer::nextToken);
+        assertThrows(UnexpectedTokenException.class, lexer::nextToken);
     }
 }
