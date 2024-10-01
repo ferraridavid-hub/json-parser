@@ -60,6 +60,16 @@ public class ParserTest {
     }
 
     @Test
+    public void testJsonWithNull() {
+        checkValidJson("{\"name\":null}");
+    }
+
+    @Test
+    public void testInvalidJsonWithNullKey(){
+        checkInvalidJson("{null: true}");
+    }
+
+    @Test
     public void testInvalidJsonWithBooleanKey() {
         var json = """
                 {

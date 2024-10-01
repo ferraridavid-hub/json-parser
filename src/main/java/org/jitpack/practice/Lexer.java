@@ -30,6 +30,15 @@ public class Lexer {
         throw new UnexpectedTokenException("" + text.charAt(position));
     }
 
+    private String tokenizeNull() throws UnexpectedTokenException {
+        var nullString = "null";
+        String sub = text.substring(position, position + nullString.length());
+        if(sub.equals(nullString)) {
+            return sub;
+        }
+        throw new UnexpectedTokenException("" + text.charAt(position));
+    }
+
     public Token nextToken() throws UnexpectedTokenException {
         while (position < text.length() && Character.isWhitespace(text.charAt(position))) {
             position++;
@@ -65,6 +74,10 @@ public class Lexer {
                 var boolTrue = tokenizeBoolean(true);
                 position += boolTrue.length();
                 return new Token(TokenType.BOOLEAN, boolTrue);
+            case 'n':
+                var nullString = tokenizeNull();
+                position += nullString.length();
+                return new Token(TokenType.NULL, nullString);
             default:
                 throw new UnexpectedTokenException("" + current);
         }

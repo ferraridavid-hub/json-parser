@@ -25,6 +25,8 @@ public class Parser {
             eat(TokenType.STRING);
         else if (currentToken.getType().equals(TokenType.BOOLEAN))
             eat(TokenType.BOOLEAN);
+        else if (currentToken.getType().equals(TokenType.NULL))
+            eat(TokenType.NULL);
     }
 
     private void parseKeyValuePairs() throws UnexpectedTokenException {

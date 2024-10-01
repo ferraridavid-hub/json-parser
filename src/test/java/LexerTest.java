@@ -129,4 +129,23 @@ public class LexerTest {
         assertEquals(expectedToken2, token2);
         assertEquals(expectedToken3, token3);
     }
+
+    @Test
+    public void testNullToken() {
+        var lexer = new Lexer(",null,null");
+        var token1 = assertDoesNotThrow(lexer::nextToken);
+        var token2 = assertDoesNotThrow(lexer::nextToken);
+        var token3 = assertDoesNotThrow(lexer::nextToken);
+        var token4 = assertDoesNotThrow(lexer::nextToken);
+
+        var expectedToken1 = new Token(TokenType.COMMA, ",");
+        var expectedToken2 = new Token(TokenType.NULL, "null");
+        var expectedToken3 = new Token(TokenType.COMMA, ",");
+        var expectedToken4 = new Token(TokenType.NULL, "null");
+
+        assertEquals(expectedToken1, token1);
+        assertEquals(expectedToken2, token2);
+        assertEquals(expectedToken3, token3);
+        assertEquals(expectedToken4, token4);
+    }
 }
