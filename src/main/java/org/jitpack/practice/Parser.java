@@ -18,10 +18,19 @@ public class Parser {
         }
     }
 
-    private void parseStringToString() throws UnexpectedTokenException {
+    private void parseKeyValuePair() throws UnexpectedTokenException {
         eat(TokenType.STRING);
         eat(TokenType.COLON);
         eat(TokenType.STRING);
+    }
+
+    private void parseKeyValuePairs() throws UnexpectedTokenException {
+        parseKeyValuePair();
+        while (currentToken.getType().equals(TokenType.COMMA)) {
+            eat(TokenType.COMMA);
+            parseKeyValuePair();
+        }
+        eat(TokenType.RIGHT_BRACE);
     }
 
     public void parse() throws UnexpectedTokenException {
@@ -29,12 +38,7 @@ public class Parser {
         if (currentToken.getType().equals(TokenType.RIGHT_BRACE)) {
             eat(TokenType.RIGHT_BRACE);
         } else {
-            parseStringToString();
-            while (currentToken.getType().equals(TokenType.COMMA)) {
-                eat(TokenType.COMMA);
-                parseStringToString();
-            }
-            eat(TokenType.RIGHT_BRACE);
+            parseKeyValuePairs();
         }
         eat(TokenType.EOF);
     }
