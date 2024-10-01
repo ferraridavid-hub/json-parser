@@ -92,6 +92,25 @@ public class ParserTest {
         checkInvalidJson("{[]:true}");
     }
 
+    @Test
+    public void testComplexJsonWithNestedStructures() {
+        var json = """
+                {
+                    "name": "david",
+                    "lastName": "ferrari",
+                    "isAdmin": false,
+                    "partnership": null,
+                    "courses": ["ml crash course", "ethical hacking", "dsa in go"],
+                    "experience": {
+                                        "java": "2 years",
+                                        "docker": "1 year",
+                                        "burpsuite": "1 year"
+                                    }
+                }
+                """;
+        checkValidJson(json);
+    }
+
     private static void checkValidJson(String json) {
         var parser = assertDoesNotThrow(() -> new Parser(new Lexer(json)));
         assertDoesNotThrow(parser::parse);

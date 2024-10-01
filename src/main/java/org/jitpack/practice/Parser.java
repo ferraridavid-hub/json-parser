@@ -31,6 +31,12 @@ public class Parser {
                 parseValues();
             }
             eat(TokenType.RIGHT_SQUARE_BRACE);
+        } else if (currentToken.getType().equals(TokenType.LEFT_BRACE)) {
+            eat(TokenType.LEFT_BRACE);
+            if (!currentToken.getType().equals(TokenType.RIGHT_BRACE)) {
+                parseKeyValuePairs();
+            }
+            eat(TokenType.RIGHT_BRACE);
         }
     }
 
