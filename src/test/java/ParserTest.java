@@ -16,7 +16,7 @@ public class ParserTest {
 
     @Test
     public void testJsonWithWithspaces() throws UnexpectedTokenException, InvalidSyntaxException {
-        var parser = new Parser(new Lexer("  {  }  "));
+        var parser = new Parser(new Lexer("  { \n }  \t"));
         assertDoesNotThrow(parser::parse);
     }
 

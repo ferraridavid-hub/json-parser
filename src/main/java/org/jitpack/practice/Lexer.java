@@ -11,7 +11,7 @@ public class Lexer {
     }
 
     public Token nextToken() throws UnexpectedTokenException{
-        while (position < text.length() && Character.isSpaceChar(text.charAt(position))) {
+        while (position < text.length() && Character.isWhitespace(text.charAt(position))) {
             position++;
         }
 
