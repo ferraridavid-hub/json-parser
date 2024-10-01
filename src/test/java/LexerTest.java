@@ -49,6 +49,28 @@ public class LexerTest {
     }
 
     @Test
+    public void testJsonWithColonAndWhiteSpaces() {
+        var lexer = new Lexer("\t{\"name\": \"david\"\n}");
+        var token1 = assertDoesNotThrow(lexer::nextToken);
+        var token2 = assertDoesNotThrow(lexer::nextToken);
+        var token3 = assertDoesNotThrow(lexer::nextToken);
+        var token4 = assertDoesNotThrow(lexer::nextToken);
+        var token5 = assertDoesNotThrow(lexer::nextToken);
+
+        var expectedToken1 = new Token(TokenType.LEFT_BRACE, "{");
+        var expectedToken2 = new Token(TokenType.STRING, "\"name\"");
+        var expectedToken3 = new Token(TokenType.COLON, ":");
+        var expectedToken4 = new Token(TokenType.STRING, "\"david\"");
+        var expectedToken5 = new Token(TokenType.RIGHT_BRACE, "}");
+
+        assertEquals(expectedToken1, token1);
+        assertEquals(expectedToken2, token2);
+        assertEquals(expectedToken3, token3);
+        assertEquals(expectedToken4, token4);
+        assertEquals(expectedToken5, token5);
+    }
+
+    @Test
     public void testString() {
         var lexer = new Lexer("\"alfa\"");
         var token = assertDoesNotThrow(lexer::nextToken);
